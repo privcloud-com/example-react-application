@@ -1,25 +1,54 @@
+import React from 'react';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { ConnectedRouter } from 'connected-react-router';
+
+import Records from './components/Records'
+
+import configureStore, { history } from './store';
+
 import logo from './logo.svg';
 import './App.css';
+import authService from './services/authService';
+
+const store = configureStore();
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const [isLoaded, setIsLoaded] = React.useState(false);
+
+  React.useEffect(() => {
+    (async () => {
+      const response = await authService.login({
+        email: 'arda@vantagepoint.co',
+        password: 'foo1234',
+      });
+      localStorage.setItem('token', response.access_token);
+      setIsLoaded(true);
+    })();
+  }, []);
+
+  if (!isLoaded) {
+    return <h6>Loading...</h6>;
+  }
+
+  return(
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        <div className="App">
+          <header className="App-header">
+            <img src={logo} className="App-logo" alt="logo" />
+            <h1 className="App-title">Simple React App</h1>
+          </header>
+          <Switch>
+            <Route exact path= "/" render={() => (
+              <Redirect to="/privcloud/records"/>
+            )}/>
+            <Route exact path='/:type/records' component={Records} />
+          </Switch>
+        </div>
+      </ConnectedRouter>
+    </Provider>
+  )
 }
 
 export default App;
