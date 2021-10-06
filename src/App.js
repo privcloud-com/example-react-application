@@ -1,11 +1,10 @@
 import React from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'connected-react-router';
 
 import Records from './components/Records'
 
-import configureStore, { history } from './store';
+import configureStore from './store';
 
 import logo from './logo.svg';
 import './App.css';
@@ -33,7 +32,7 @@ function App() {
 
   return(
     <Provider store={store}>
-      <ConnectedRouter history={history}>
+      <BrowserRouter basename="/simple-application">
         <div className="App">
           <header className="App-header">
             <img src={logo} className="App-logo" alt="logo" />
@@ -46,7 +45,7 @@ function App() {
             <Route exact path='/:type/records' component={Records} />
           </Switch>
         </div>
-      </ConnectedRouter>
+      </BrowserRouter>
     </Provider>
   )
 }
