@@ -33,7 +33,7 @@ function Records() {
 
     if (recordIds.length === 0) return;
 
-    const response = await recordService.getWithBulkRecord(recordIds, {});
+    const response = await recordService.getWithDecryptBulkRecord(recordIds, {});
     setRecords(Object.values(response));
   }, [containerRecords]);
 

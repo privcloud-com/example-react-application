@@ -56,7 +56,7 @@ export function getRecordFromAPI(guid) {
     try {
       dispatch({ type: requestPending(GET_RECORD_REQUEST) });
 
-      const response = await recordService.getRecord(guid, {});
+      const response = await recordService.getWithDecryptRecord(guid, {});
 
       dispatch({
         type: SET_RECORD,
