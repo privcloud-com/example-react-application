@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { FormGroup, ControlLabel, FormControl } from 'react-bootstrap'
 import Panel from 'react-bootstrap/lib/Panel'
 import Button from 'react-bootstrap/lib/Button'
 
@@ -10,10 +11,18 @@ import { getRecordsFromAPI, getRecordsFromJSON } from '../store/actions/record';
 import { getRecordTypes } from '../store/actions/recordType';
 import recordService from '../services/recordService';
 
+const TRANSFORMATIONS = [
+  { label: 'Decrypted', value: 'decrypt' },
+  { label: 'Encrypted', value: 'encrypt' },
+  { label: 'Anonymized', value: 'anonymize' },
+  { label: 'Redacted', value: 'redact' },
+];
+
 function Records() {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(null);
   const [records, setRecords] = useState([]);
+  const [transformation, setTransformation] = useState('decrypt');
 
   const { type } = useParams();
   const dispatch = useDispatch();
@@ -84,10 +93,22 @@ function Records() {
         ))}
       </div>
       <div className="col-md-6">
-        <RecordDetails val={selected}/>
+        <RecordDetails val={selected} transformation={transformation} />
       </div>
-      <div className="col-md-3" onClick={handleShow}>
-        <Button bsStyle="info">Create Record</Button>
+      <div className="col-md-3">
+        <FormGroup
+          controlId="formControlsSelect"
+          value={transformation}
+          onChange={(event) => setTransformation(event.target.value)}
+        >
+          <ControlLabel>TransFormation</ControlLabel>
+          <FormControl componentClass="select" placeholder="Transformation">
+            {TRANSFORMATIONS.map((trans) => (
+              <option value={trans.value}>{trans.label}</option>
+            ))}
+          </FormControl>
+        </FormGroup>
+        <Button bsStyle="info" onClick={handleShow}>Create Record</Button>
       </div>
       {open && (
         <RecordDialog open={open} guid={null} onClose={handleClose} />

@@ -51,12 +51,22 @@ export function getRecordsFromJSON() {
   };
 }
 
-export function getRecordFromAPI(guid) {
+export function getRecordFromAPI(guid, transformation) {
   return async (dispatch) => {
     try {
       dispatch({ type: requestPending(GET_RECORD_REQUEST) });
 
-      const response = await recordService.getWithDecryptRecord(guid, {});
+      let response;
+      
+      if (transformation === 'decrypt') {
+        response = await recordService.getWithDecryptRecord(guid, {});
+      } else if (transformation === 'anonymize') {
+        response = await recordService.getWithAnonymizeRecord(guid, {});
+      } else if (transformation === 'redact') {
+        response = await recordService.getWithRedactRecord(guid, {});
+      } else {
+        response = await recordService.getRecord(guid, {});
+      }
 
       dispatch({
         type: SET_RECORD,

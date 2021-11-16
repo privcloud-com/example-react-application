@@ -9,7 +9,7 @@ import locale from 'react-json-editor-ajrm/locale/en';
 import RecordDialog from './RecordDialog';
 import { getRecordFromAPI, setRecord } from '../store/actions/record';
 
-function RecordDetails({ val }) {
+function RecordDetails({ val, transformation }) {
   const [open, setOpen] = useState(false);
 
   const { type } = useParams();
@@ -20,12 +20,12 @@ function RecordDetails({ val }) {
   const fetchRecord = useCallback(() => { 
     if (val) {
       if (type === 'privcloud') {
-        dispatch(getRecordFromAPI(val));
+        dispatch(getRecordFromAPI(val, transformation));
       } else {
         dispatch(setRecord({ guid: val }));
       }
     }
-  }, [val, type]);
+  }, [val, type, transformation]);
 
   useEffect(() => {
     fetchRecord();
