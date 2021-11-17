@@ -32,7 +32,7 @@ function App() {
 
   return(
     <Provider store={store}>
-      <BrowserRouter basename="/simple-application">
+      <BrowserRouter>
         <div className="App">
           <header className="App-header">
             <img src={logo} className="App-logo" alt="logo" />
