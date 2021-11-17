@@ -34,6 +34,16 @@ function RecordDialog({ open, guid, onClose }) {
     }
   }, [guid, record]);
 
+  useEffect(() => {
+    if (recordTypes.length > 0 && !newRecord?.record_type_id) {
+      setNewRecord((oldRecord) => ({
+        ...(oldRecord || {}),
+        record_type_id: recordTypes[0].id,
+        record: schemaToJSON(recordTypes[0].schema),
+      }));
+    }
+  }, [recordTypes, newRecord]);
+
   const handleChangeRecord = (newValue) => {
     setNewRecord({
       ...newRecord,
