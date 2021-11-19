@@ -35,7 +35,7 @@ function RecordDialog({ open, guid, onClose }) {
   }, [guid, record]);
 
   useEffect(() => {
-    if (recordTypes.length > 0 && !newRecord?.record_type_id) {
+    if (recordTypes.length > 0 && newRecord && !newRecord?.record_type_id) {
       setNewRecord((oldRecord) => ({
         ...(oldRecord || {}),
         record_type_id: recordTypes[0].id,
@@ -94,7 +94,7 @@ function RecordDialog({ open, guid, onClose }) {
               <FormControl
                 name="guid"
                 placeholder="Record Guid"
-                value={newRecord.guid}
+                value={record.guid}
                 readOnly
               />
             </FormGroup>
@@ -107,7 +107,7 @@ function RecordDialog({ open, guid, onClose }) {
               ))}
             </FormControl>
           </FormGroup>
-          {record.record_type && (
+          {record?.record_type && (
             <FormGroup className="form-group">
               <ControlLabel>
                 Record Type

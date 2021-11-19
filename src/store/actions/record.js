@@ -95,11 +95,11 @@ export function createRecord(payload) {
     try {
       dispatch({ type: requestPending(CREATE_RECORD_REQUEST) });
 
-      await recordService.createRecord(payload);
+      const data = await recordService.createRecord(payload);
 
       dispatch({
         type: requestSuccess(CREATE_RECORD_REQUEST),
-        payload: { record: payload },
+        payload: { record: data },
       });
     } catch (error) {
       dispatch({

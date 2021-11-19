@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from 'react-bootstrap/lib/Button'
 import Panel from 'react-bootstrap/lib/Panel'
@@ -7,25 +6,20 @@ import JSONInput from 'react-json-editor-ajrm/index';
 import locale from 'react-json-editor-ajrm/locale/en';
 
 import RecordDialog from './RecordDialog';
-import { getRecordFromAPI, setRecord } from '../store/actions/record';
+import { getRecordFromAPI } from '../store/actions/record';
 
 function RecordDetails({ val, transformation }) {
   const [open, setOpen] = useState(false);
 
-  const { type } = useParams();
   const dispatch = useDispatch();
   const { record } = useSelector(state => state.record);
   const { recordTypes } = useSelector(state => state.recordType);
 
   const fetchRecord = useCallback(() => { 
     if (val) {
-      if (type === 'privcloud') {
-        dispatch(getRecordFromAPI(val, transformation));
-      } else {
-        dispatch(setRecord({ guid: val }));
-      }
+      dispatch(getRecordFromAPI(val, transformation));
     }
-  }, [val, type, transformation]);
+  }, [val, transformation]);
 
   useEffect(() => {
     fetchRecord();
@@ -47,7 +41,7 @@ function RecordDetails({ val, transformation }) {
         <Panel.Body style={{ textAlign: 'left' }}>
           <p>Guid : {record.guid}</p>
           <p>Record Type : {recordTypes.find((recordType) => recordType.id === record.record_type_id).name}</p>
-          <p>Tags : {record.tags.map(({ tag }) => tag).join(', ')}</p>
+          <p>Tags : {record?.tags?.map(({ tag }) => tag).join(', ')}</p>
           <JSONInput
             placeholder={record.record}
             locale={locale}

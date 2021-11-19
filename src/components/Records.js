@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormGroup, ControlLabel, FormControl } from 'react-bootstrap'
 import Panel from 'react-bootstrap/lib/Panel'
@@ -24,18 +23,9 @@ function Records() {
   const [records, setRecords] = useState([]);
   const [transformation, setTransformation] = useState('decrypt');
 
-  const { type } = useParams();
   const dispatch = useDispatch();
   const { records: containerRecords } = useSelector(state => state.record);
   const { recordTypes } = useSelector(state => state.recordType);
-
-  const fetchContainerRecords = useCallback(async () => {
-    if (type === 'privcloud') {
-      dispatch(getRecordsFromAPI('aaaaaaaa-a9eb-4425-b356-5f7976b5defb'));
-    } else {
-      dispatch(getRecordsFromJSON());
-    }
-  }, [type]);
 
   const fetchRecords = useCallback(async () => {
     const recordIds = containerRecords.map(({ guid }) => guid);
@@ -53,15 +43,12 @@ function Records() {
   }, [records]);
 
   useEffect(() => {
-    fetchContainerRecords();
-  }, [fetchContainerRecords]);
-
-  useEffect(() => {
     fetchRecords();
   }, [fetchRecords]);
 
   useEffect(() => {
     (async () => {
+      await dispatch(getRecordsFromAPI('aaaaaaaa-a9eb-4425-b356-5f7976b5defb'));
       await dispatch(getRecordTypes());
     })();
   }, []);
@@ -84,7 +71,7 @@ function Records() {
             <Panel.Body>
               <p>{record.guid}</p>
               <p>{recordTypes.find((recordType) => recordType.id === record.record_type_id).name}</p>
-              <p>{record.tags.map(({ tag }) => tag).join(', ')}</p>
+              <p>Tags : {record?.tags?.map(({ tag }) => tag).join(', ')}</p>
               <Button bsStyle="info" onClick={() => setSelected(record.guid)}>
                 Click to View Details
               </Button>

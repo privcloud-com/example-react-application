@@ -68,7 +68,7 @@ export default createReducer(initialState, {
     const { guid, record } = payload;
     const recordIndex = state.records.findIndex((rec) => rec.guid === guid);
     state.record = record;
-    state.records[recordIndex] = { ...record, ...state.records[recordIndex] };
+    state.records[recordIndex] = { ...state.records[recordIndex], ...record };
     state.status = requestSuccess(UPDATE_RECORD_REQUEST);
   },
 

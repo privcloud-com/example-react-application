@@ -1,5 +1,4 @@
 import React from 'react';
-import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
 import Records from './components/Records'
@@ -32,20 +31,13 @@ function App() {
 
   return(
     <Provider store={store}>
-      <BrowserRouter>
-        <div className="App">
-          <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <h1 className="App-title">Simple PrivCloud React App</h1>
-          </header>
-          <Switch>
-            <Route exact path= "/" render={() => (
-              <Redirect to="/privcloud/records"/>
-            )}/>
-            <Route exact path='/:type/records' component={Records} />
-          </Switch>
-        </div>
-      </BrowserRouter>
+      <div className="App">
+        <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+          <h1 className="App-title">Simple PrivCloud React App</h1>
+        </header>
+        <Records />
+      </div>
     </Provider>
   )
 }
